@@ -380,6 +380,7 @@ if page == "🏠 Dashboard Home":
             barmode='group',
             color_discrete_sequence=['#667eea', '#4facfe']
         )
+        fig_region.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
         fig_region.update_layout(
             font=dict(color='white'),
             paper_bgcolor='rgba(0,0,0,0)',
@@ -405,6 +406,7 @@ if page == "🏠 Dashboard Home":
             title="Opportunities Distribution by Region",
             color_discrete_sequence=['#667eea', '#764ba2', '#4facfe', '#00f2fe', '#ff6b6b']
         )
+        fig_opp.update_traces(textposition='inside', textinfo='percent+label+value')
         fig_opp.update_layout(
             font=dict(color='white'),
             paper_bgcolor='rgba(0,0,0,0)',
@@ -439,6 +441,7 @@ if page == "🏠 Dashboard Home":
         barmode='group',
         color_discrete_sequence=['#764ba2', '#ff6b6b']
     )
+    fig_channel.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
     fig_channel.update_layout(
         font=dict(color='white'),
         paper_bgcolor='rgba(0,0,0,0)',
@@ -471,6 +474,7 @@ if page == "🏠 Dashboard Home":
             color='Closure',
             color_continuous_scale='Viridis'
         )
+        fig_top.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
         fig_top.update_layout(
             font=dict(color='white'),
             paper_bgcolor='rgba(0,0,0,0)',
@@ -498,6 +502,7 @@ if page == "🏠 Dashboard Home":
             color='Opportunities',
             color_continuous_scale='Plasma'
         )
+        fig_top_opps.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
         fig_top_opps.update_layout(
             font=dict(color='white'),
             paper_bgcolor='rgba(0,0,0,0)',
@@ -541,7 +546,17 @@ elif page == "📊 Year Comparison":
             })
         
         metrics_df = pd.DataFrame(year_metrics)
-        st.dataframe(metrics_df.style.background_gradient(cmap='Blues'), use_container_width=True)
+        st.dataframe(
+            metrics_df.style
+            .format({
+                'Opportunities': format_number,
+                'Pipeline': format_currency,
+                'Closure': format_currency,
+                'Conversion Rate (%)': '{:.2f}%'
+            })
+            .background_gradient(cmap='Blues'),
+            use_container_width=True
+        )
         
         # Visual Comparisons
         col1, col2 = st.columns(2)
@@ -556,6 +571,7 @@ elif page == "📊 Year Comparison":
                 color='Year',
                 color_discrete_sequence=['#667eea', '#764ba2', '#4facfe']
             )
+            fig_opps.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
             fig_opps.update_layout(
                 font=dict(color='white'),
                 paper_bgcolor='rgba(0,0,0,0)',
@@ -572,13 +588,19 @@ elif page == "📊 Year Comparison":
                 x=metrics_df['Year'],
                 y=metrics_df['Pipeline'],
                 name='Pipeline',
-                marker_color='#667eea'
+                marker_color='#667eea',
+                text=metrics_df['Pipeline'],
+                textposition='outside',
+                texttemplate='%{text:,.0f}'
             ))
             fig_pipeline.add_trace(go.Bar(
                 x=metrics_df['Year'],
                 y=metrics_df['Closure'],
                 name='Closure',
-                marker_color='#4facfe'
+                marker_color='#4facfe',
+                text=metrics_df['Closure'],
+                textposition='outside',
+                texttemplate='%{text:,.0f}'
             ))
             fig_pipeline.update_layout(
                 title="Pipeline vs Closure Trend",
@@ -599,7 +621,12 @@ elif page == "📊 Year Comparison":
             markers=True,
             line_shape='spline'
         )
-        fig_conversion.update_traces(line_color='#00f2fe', marker=dict(size=12, color='#4facfe'))
+        fig_conversion.update_traces(
+            line_color='#00f2fe', 
+            marker=dict(size=12, color='#4facfe'),
+            texttemplate='%{y:.1f}%',
+            textposition="top center"
+        )
         fig_conversion.update_layout(
             font=dict(color='white'),
             paper_bgcolor='rgba(0,0,0,0)',
@@ -634,6 +661,7 @@ elif page == "📊 Year Comparison":
                         color='Year',
                         color_discrete_sequence=['#667eea', '#764ba2', '#4facfe']
                     )
+                    fig_region.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
                     fig_region.update_layout(
                         font=dict(color='white'),
                         paper_bgcolor='rgba(0,0,0,0)',
@@ -668,6 +696,7 @@ elif page == "📊 Year Comparison":
             title="Channel Performance Across Years",
             color_discrete_sequence=['#667eea', '#764ba2', '#4facfe']
         )
+        fig_channel_year.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
         fig_channel_year.update_layout(
             font=dict(color='white'),
             paper_bgcolor='rgba(0,0,0,0)',
@@ -743,7 +772,12 @@ elif page == "👑 Boss Dashboard":
             markers=True,
             line_shape='spline'
         )
-        fig_growth.update_traces(line_color='#00f2fe', marker=dict(size=15, color='#4facfe'))
+        fig_growth.update_traces(
+            line_color='#00f2fe', 
+            marker=dict(size=15, color='#4facfe'),
+            texttemplate='%{y:,.0f}',
+            textposition="top center"
+        )
         fig_growth.update_layout(
             font=dict(color='white'),
             paper_bgcolor='rgba(0,0,0,0)',
@@ -769,6 +803,7 @@ elif page == "👑 Boss Dashboard":
             title="Revenue Distribution by Region",
             color_discrete_sequence=['#667eea', '#764ba2', '#4facfe', '#00f2fe', '#ff6b6b']
         )
+        fig_region_rev.update_traces(textposition='inside', textinfo='percent+label+value')
         fig_region_rev.update_layout(
             font=dict(color='white'),
             paper_bgcolor='rgba(0,0,0,0)',
@@ -835,6 +870,7 @@ elif page == "👑 Boss Dashboard":
         color='Revenue',
         color_continuous_scale='Viridis'
     )
+    fig_channel_sum.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
     fig_channel_sum.update_layout(
         font=dict(color='white'),
         paper_bgcolor='rgba(0,0,0,0)',
@@ -861,7 +897,7 @@ elif page == "👑 Boss Dashboard":
 elif page == "👥 Detailed Performers":
     st.markdown('<div class="section-header">👥 Detailed Performers by Channel</div>', unsafe_allow_html=True)
     
-    # Detailed data preparation
+    # Detailed data preparation for channels
     detailed_data = []
     year_region_cols_global = [col for col in filtered_df.columns if any(year in col for year in selected_years) and any(region in col for region in selected_regions)]
     for person in sorted(filtered_df['People'].unique()):
@@ -884,11 +920,62 @@ elif page == "👥 Detailed Performers":
                     'Deal Size': deal_size
                 })
     
-    detailed_df = pd.DataFrame(detailed_data)
+    channel_detailed_df = pd.DataFrame(detailed_data)
     
-    if not detailed_df.empty:
+    # New: Detailed data preparation for Person-Year-Region
+    person_year_region_data = []
+    for person in sorted(filtered_df['People'].unique()):
+        for year in selected_years:
+            for region in selected_regions:
+                person_year_region_df = filtered_df[(filtered_df['People'] == person)]
+                year_region_col = f'{region}_{year}'
+                if year_region_col in person_year_region_df.columns:
+                    opps = person_year_region_df[person_year_region_df['Metric'] == 'Opps created'][year_region_col].sum()
+                    pipeline = person_year_region_df[person_year_region_df['Metric'] == 'Pipeline'][year_region_col].sum()
+                    closure = person_year_region_df[person_year_region_df['Metric'] == 'Closure'][year_region_col].sum()
+                    win_rate = (closure / pipeline * 100) if pipeline > 0 else 0
+                    deal_size = closure / opps if opps > 0 else 0
+                    
+                    person_year_region_data.append({
+                        'Person': person,
+                        'Year': year,
+                        'Region': region,
+                        'Opportunities': opps,
+                        'Pipeline': pipeline,
+                        'Revenue': closure,
+                        'Win Rate (%)': win_rate,
+                        'Deal Size': deal_size
+                    })
+    
+    person_year_region_df = pd.DataFrame(person_year_region_data)
+    
+    # New: Detailed data preparation for Region-Year (Overall)
+    region_year_data = []
+    for year in selected_years:
+        for region in selected_regions:
+            year_region_col = f'{region}_{year}'
+            if year_region_col in filtered_df.columns:
+                opps = filtered_df[filtered_df['Metric'] == 'Opps created'][year_region_col].sum()
+                pipeline = filtered_df[filtered_df['Metric'] == 'Pipeline'][year_region_col].sum()
+                closure = filtered_df[filtered_df['Metric'] == 'Closure'][year_region_col].sum()
+                win_rate = (closure / pipeline * 100) if pipeline > 0 else 0
+                deal_size = closure / opps if opps > 0 else 0
+                
+                region_year_data.append({
+                    'Region': region,
+                    'Year': year,
+                    'Opportunities': opps,
+                    'Pipeline': pipeline,
+                    'Revenue': closure,
+                    'Win Rate (%)': win_rate,
+                    'Deal Size': deal_size
+                })
+    
+    region_year_df = pd.DataFrame(region_year_data)
+    
+    if not channel_detailed_df.empty or not person_year_region_df.empty or not region_year_df.empty:
         # Person selector
-        selected_person = st.selectbox("Select a Person for Detailed Channel Breakdown:", options=['Overall'] + sorted(detailed_df['Person'].unique()))
+        selected_person = st.selectbox("Select a Person for Detailed Channel Breakdown:", options=['Overall'] + sorted(filtered_df['People'].unique()))
         
         # Dynamic key metrics based on selection
         if selected_person == 'Overall':
@@ -944,9 +1031,10 @@ elif page == "👥 Detailed Performers":
             </div>
             """, unsafe_allow_html=True)
         
+        # Channel Breakdown (existing)
         if selected_person != 'Overall':
             # Detailed view for selected person
-            person_data = detailed_df[detailed_df['Person'] == selected_person].sort_values('Channel')
+            person_data = channel_detailed_df[channel_detailed_df['Person'] == selected_person].sort_values('Channel')
             
             col1, col2 = st.columns(2)
             
@@ -960,6 +1048,7 @@ elif page == "👥 Detailed Performers":
                     color='Revenue',
                     color_continuous_scale='Blues'
                 )
+                fig_bar.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
                 fig_bar.update_layout(
                     font=dict(color='white'),
                     paper_bgcolor='rgba(0,0,0,0)',
@@ -970,7 +1059,7 @@ elif page == "👥 Detailed Performers":
                 st.plotly_chart(fig_bar, use_container_width=True)
             
             with col2:
-                # Table for detailed metrics
+                # Table for detailed metrics (channels)
                 st.markdown(f"### 📋 {selected_person} - Channel Details")
                 st.dataframe(
                     person_data[['Channel', 'Opportunities', 'Pipeline', 'Revenue', 'Win Rate (%)', 'Deal Size']].style
@@ -986,11 +1075,152 @@ elif page == "👥 Detailed Performers":
                     hide_index=True
                 )
         
-        # Option for Overall Table
-        if st.checkbox("📊 Show Overall Detailed Table (All Persons & Channels)"):
-            st.markdown("### 📋 Complete Breakdown Table")
+        # New: Year-wise Breakdown for Selected Person
+        st.markdown('<div class="section-header">📅 Year-wise Performance</div>', unsafe_allow_html=True)
+        person_year_data = person_year_region_df[person_year_region_df['Person'] == selected_person].groupby('Year').agg({
+            'Opportunities': 'sum',
+            'Pipeline': 'sum',
+            'Revenue': 'sum',
+            'Win Rate (%)': 'mean',
+            'Deal Size': 'mean'
+        }).reset_index()
+        
+        if not person_year_data.empty:
+            st.markdown("### 📋 Detailed Metrics by Year")
             st.dataframe(
-                detailed_df.sort_values(['Person', 'Channel']).style
+                person_year_data.style
+                .format({
+                    'Opportunities': format_number,
+                    'Pipeline': format_currency,
+                    'Revenue': format_currency,
+                    'Win Rate (%)': '{:.2f}%',
+                    'Deal Size': format_currency
+                })
+                .background_gradient(subset=['Revenue', 'Pipeline'], cmap='Blues'),
+                use_container_width=True,
+                hide_index=True
+            )
+            
+            # Year-wise Chart
+            fig_year = px.bar(
+                person_year_data,
+                x='Year',
+                y=['Pipeline', 'Revenue'],
+                title=f"{selected_person} - Revenue vs Pipeline by Year",
+                barmode='group',
+                color_discrete_sequence=['#667eea', '#4facfe']
+            )
+            fig_year.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
+            fig_year.update_layout(
+                font=dict(color='white'),
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                title_font_size=16
+            )
+            st.plotly_chart(fig_year, use_container_width=True)
+        
+        # New: Region-wise Breakdown for Selected Person
+        st.markdown('<div class="section-header">🌍 Region-wise Performance</div>', unsafe_allow_html=True)
+        person_region_data = person_year_region_df[person_year_region_df['Person'] == selected_person].groupby('Region').agg({
+            'Opportunities': 'sum',
+            'Pipeline': 'sum',
+            'Revenue': 'sum',
+            'Win Rate (%)': 'mean',
+            'Deal Size': 'mean'
+        }).reset_index()
+        
+        if not person_region_data.empty:
+            st.markdown("### 📋 Detailed Metrics by Region")
+            st.dataframe(
+                person_region_data.style
+                .format({
+                    'Opportunities': format_number,
+                    'Pipeline': format_currency,
+                    'Revenue': format_currency,
+                    'Win Rate (%)': '{:.2f}%',
+                    'Deal Size': format_currency
+                })
+                .background_gradient(subset=['Revenue', 'Pipeline'], cmap='Blues'),
+                use_container_width=True,
+                hide_index=True
+            )
+            
+            # Region-wise Chart
+            fig_region = px.pie(
+                person_region_data,
+                values='Revenue',
+                names='Region',
+                title=f"{selected_person} - Revenue by Region",
+                color_discrete_sequence=['#667eea', '#764ba2', '#4facfe', '#00f2fe']
+            )
+            fig_region.update_traces(textposition='inside', textinfo='percent+label+value')
+            fig_region.update_layout(
+                font=dict(color='white'),
+                paper_bgcolor='rgba(0,0,0,0)',
+                title_font_size=16
+            )
+            st.plotly_chart(fig_region, use_container_width=True)
+        
+        # New: Overall Region-Year Table and Chart
+        st.markdown('<div class="section-header">🌍📅 Overall Region-Year Performance</div>', unsafe_allow_html=True)
+        if not region_year_df.empty:
+            st.markdown("### 📋 Detailed Metrics by Region and Year")
+            st.dataframe(
+                region_year_df.style
+                .format({
+                    'Opportunities': format_number,
+                    'Pipeline': format_currency,
+                    'Revenue': format_currency,
+                    'Win Rate (%)': '{:.2f}%',
+                    'Deal Size': format_currency
+                })
+                .background_gradient(subset=['Revenue', 'Pipeline'], cmap='Blues'),
+                use_container_width=True,
+                hide_index=False
+            )
+            
+            # Region-Year Chart
+            fig_region_year = px.bar(
+                region_year_df,
+                x='Region',
+                y='Revenue',
+                color='Year',
+                barmode='group',
+                title="Overall Revenue by Region and Year",
+                color_discrete_sequence=['#667eea', '#764ba2', '#4facfe']
+            )
+            fig_region_year.update_traces(texttemplate='%{y:,.0f}', textposition='outside')
+            fig_region_year.update_layout(
+                font=dict(color='white'),
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                title_font_size=16
+            )
+            fig_region_year.update_xaxes(tickangle=45)
+            st.plotly_chart(fig_region_year, use_container_width=True)
+        
+        # Option for Overall Channel Table
+        if st.checkbox("📊 Show Overall Detailed Channel Table (All Persons & Channels)"):
+            st.markdown("### 📋 Complete Channel Breakdown Table")
+            st.dataframe(
+                channel_detailed_df.sort_values(['Person', 'Channel']).style
+                .format({
+                    'Opportunities': format_number,
+                    'Pipeline': format_currency,
+                    'Revenue': format_currency,
+                    'Win Rate (%)': '{:.2f}%',
+                    'Deal Size': format_currency
+                })
+                .background_gradient(subset=['Revenue', 'Pipeline', 'Deal Size'], cmap='Blues'),
+                use_container_width=True,
+                hide_index=False
+            )
+        
+        # Option for Overall Person-Year-Region Table
+        if st.checkbox("📊 Show Overall Person-Year-Region Table"):
+            st.markdown("### 📋 Complete Person-Year-Region Breakdown Table")
+            st.dataframe(
+                person_year_region_df.sort_values(['Person', 'Year', 'Region']).style
                 .format({
                     'Opportunities': format_number,
                     'Pipeline': format_currency,
